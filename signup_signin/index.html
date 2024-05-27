@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Sign Up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('background.jpeg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            width: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .text-center{
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            text-align: center
+        }
+        #show-signup,#show-signin{
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+        }
+
+        
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title text-center">Sign In</h2>
+        <form id="signin-form">
+            <div class="form-group">
+                <label for="signin-username">Username</label>
+                <input type="text" class="form-control" id="signin-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="signin-password">Password</label>
+                <input type="password" class="form-control" id="signin-password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        </form>
+        <p class="text-center mt-3">Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+    </div>
+</div>
+
+<div class="card" style="display: none;">
+    <div class="card-body">
+        <h2 class="card-title text-center">Sign Up</h2>
+        <form id="signup-form">
+            <div class="form-group">
+                <label for="signup-username">Username</label>
+                <input type="text" class="form-control" id="signup-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-email">Email</label>
+                <input type="email" class="form-control" id="signup-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-password">Password</label>
+                <input type="password" class="form-control" id="signup-password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+        </form>
+        <p class="text-center mt-3">Already have an account? <a href="#" id="show-signin">Sign In</a></p>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#show-signup').click(function() {
+            $('.card').toggle();
+        });
+        $('#show-signin').click(function() {
+            $('.card').toggle();
+        });
+
+        $('#signin-form').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: 'signin.php',
+                data: $(this).serialize(),
+                success: function(response) {
+                    alert(response);
+                }
+            });
+        });
+
+        $('#signup-form').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: 'signup.php',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('Sign up successful! Redirecting to sign in page...');
+                        $('.card').toggle();
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
